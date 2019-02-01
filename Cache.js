@@ -12,13 +12,12 @@ class Cache {
     this.map = new Map()
   }
   get (key) {
-    if (this.map.has(key)) {
-      // update the node to be the tail
-      const node = this.map.get(key)
-      this._setMostRecent(node)
-      return node.data.val
-    }
-    return null
+    if (!this.map.has(key)) return null
+    
+    // update the node to be the tail
+    const node = this.map.get(key)
+    this._setMostRecent(node)
+    return node.data.val
   }
   set (key, val) {
     const node = new ListNode({ key, val })
@@ -33,13 +32,13 @@ class Cache {
     }
   }
   _removeLeastRecent () {
+    if (!this.head) return
+    
     // chop off the head
+    this.map.delete(this.head.data.key)
+    this.head = this.head.next
     if (this.head) {
-      this.map.delete(this.head.data.key)
-      this.head = this.head.next
-      if (this.head) {
-        this.head.prev = null
-      }
+      this.head.prev = null
     }
     this.size--
   }
